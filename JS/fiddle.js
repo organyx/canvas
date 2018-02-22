@@ -1,4 +1,4 @@
-var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, drag, startX, startY, rects;
+var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, drag, startX, startY, rects, selectedRect, selectedRectOrigin;
 
 function initialize() {
     // prepare canvas elements
@@ -64,7 +64,16 @@ function rect(x, y, w, h) {
 
 // clear the canvas
 function clear() {
+    // ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    // Store the current transformation matrix
+    ctx.save();
+
+    // Use the identity matrix while clearing the canvas
+    // ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    // Restore the transform
+    ctx.restore();
 }
 
 // redraw the scene
@@ -107,6 +116,10 @@ function mDown(e) {
             // if yes, set that rects isDragging=true
             drag = true;
             rectangle.isDragging = true;
+
+            selectedRect = rectangle;
+            selectedRectOrigin = Object.assign({}, selectedRect);
+            console.log(selectedRect);
         }
     }
     // save the current mouse position
@@ -120,6 +133,23 @@ function mUp(e) {
     // tell the browser we're handling this mouse event
     e.preventDefault();
     e.stopPropagation();
+
+    var temp = rects.slice();
+    temp.pop(selectedRect);
+    console.log(temp);
+
+    for (var i = 0; i < temp.length; i++) {
+        if (detectCollision(selectedRect, temp[i])) {
+            selectedRect = Object.assign({}, selectedRectOrigin);
+            console.log('New Pos: ', selectedRect);
+            console.log('Origin: ', selectedRectOrigin);
+            draw();
+        }
+    }
+
+    // clear selected retangle
+    selectedRect = null;
+    selectedRectOrigin = null;
 
     // clear all the dragging flags
     drag = false;
@@ -151,11 +181,14 @@ function mMove(e) {
         // by the distance the mouse has moved
         // since the last mousemove
         for (var i = 0; i < rects.length; i++) {
-            var r = rects[i];
-            if (r.isDragging) {
-                r.x += dx;
-                r.y += dy;
+            var rectangle = rects[i];
+
+            if (rectangle.isDragging) {
+                rectangle.x += dx;
+                rectangle.y += dy;
+                console.log('X: ' + rectangle.x + ' Y: ' + rectangle.y);
             }
+
         }
 
         // redraw the scene with the new rect positions
@@ -165,6 +198,19 @@ function mMove(e) {
         startX = mouseX;
         startY = mouseY;
 
+    }
+}
+
+function detectCollision(object1, object2) {
+    if (object1.x < object2.x + object2.width &&
+        object1.x + object1.width > object2.x &&
+        object1.y < object2.y + object2.height &&
+        object1.height + object1.y > object2.y) {
+        console.log('Collision');
+        return true;
+    } else {
+        console.log('No Collision');
+        return false;
     }
 }
 
