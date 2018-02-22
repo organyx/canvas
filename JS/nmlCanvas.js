@@ -28,5 +28,8 @@ let Canvas = {
     },
     getWidth () {
         return this.canvas.width;
+    },
+    getBoundingClientRect() {
+        return this.canvas.getBoundingClientRect();
     }
 };

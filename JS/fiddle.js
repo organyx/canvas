@@ -9,6 +9,14 @@ function initialize() {
     offsetY = BB.top;
     WIDTH = canvas.width;
     HEIGHT = canvas.height;
+    canvas = Object.create(Canvas);
+    // canvas.init('canvas', "#FAF7F8");
+    // ctx = canvas.getContext();
+    // BB = canvas.getBoundingClientRect();
+    // offsetX = BB.left;
+    // offsetY = BB.top;
+    // WIDTH = canvas.getWidth();
+    // HEIGHT = canvas.getHeight();
 
     // drag related variables
     drag = false;
@@ -17,17 +25,17 @@ function initialize() {
     rects = [];
 
     var rect1 = Object.create(Shape);
-    rect1.init(canvas, 75 - 15, 50 - 15,  30, 30, '#444444');
+    rect1.init(canvas, 75 - 15, 50 - 15, 30, 30, '#444444');
 
     var rect2 = Object.create(Shape);
-    rect2.init(canvas, 75 - 25, 50 - 25,  30, 30, '#ff550d');
+    rect2.init(canvas, 75 - 25, 50 - 25, 30, 30, '#ff550d');
 
     var rect3 = Object.create(Shape);
-    rect3.init(canvas, 75 - 35, 50 - 35,  30, 30, '#800080');
+    rect3.init(canvas, 75 - 35, 50 - 35, 30, 30, '#800080');
 
     var rect4 = Object.create(Shape);
-    rect4.init(canvas, 75 - 45, 50 - 45,  30, 30, '#0c64e8');
-    
+    rect4.init(canvas, 75 - 45, 50 - 45, 30, 30, '#0c64e8');
+
     rects.push(rect1);
     rects.push(rect2);
     rects.push(rect3);
@@ -39,7 +47,7 @@ function initialize() {
     canvas.onmousedown = mDown;
     canvas.onmouseup = mUp;
     canvas.onmousemove = mMove;
-
+    
     // call to draw the scene
     draw();
 }
@@ -77,7 +85,7 @@ function mDown(e) {
     // tell the browser we're handling this mouse event
     e.preventDefault();
     e.stopPropagation();
-
+    console.log(e);
     // get the current mouse position
     var mx = parseInt(e.clientX - offsetX);
     var my = parseInt(e.clientY - offsetY);
