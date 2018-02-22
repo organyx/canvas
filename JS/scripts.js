@@ -15,10 +15,6 @@ var repeater = function () {
 }
 
 var initialize = function () {
-    $('b1').addEventListener('click', moveShapes); // a couple of button eventlisteners 
-    $('b2').addEventListener('click', moveShapes);
-    $('b3').addEventListener('click', moveShapes);
-    $('b4').addEventListener('click', moveShapes);
 
     mycv = Object.create(Canvas); // create canvas object
     mycv.init('myCanvas', 'transparent');
@@ -51,39 +47,8 @@ let redraw = function (cv, arr) {
     }
 }
 
-let moveShapes = function (ev) {
-    if (ev.target.id === 'b1') { // which button was hit
-        shapes[0].move(2, 4);
-    } else if (ev.target.id === 'b2') {
-        shapes[1].move(3, -3);
-    } else if (ev.target.id === 'b3') {
-        shapes[2].move(3, -3);
-    } else {
-        shapes[3].move(3, -3);
-    }
-    redraw(mycv, shapes);
-}
-
 var shapes = [];
 var mycv;
-
-// var initialize = function () {
-//     let canvas = Object.create(Canvas);
-//     canvas.init('canvas', '#ffff88');
-//     let u = Object.create(Umo);
-//     u.init(canvas, 'red');
-//     arr.push(u);
-//     u = Object.create(Umo);
-//     u.init(canvas, 'blue');
-//     arr.push(u);
-//     /*
-//                     u = new Umo(canvas, '#cc0000');
-//                     arr.push(u);
-//                     u = new Umo(canvas, '#009900');
-//                     arr.push(u);
-//     */
-//     repeater();
-// }
 
 // var initialize = function () {
 //     let canvas = Object.create(Canvas);

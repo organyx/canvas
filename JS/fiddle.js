@@ -1,6 +1,23 @@
 var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, drag, startX, startY, rects;
 
 function initialize() {
+    // prepare canvas elements
+    prepareCanvas();
+
+    // drag related variables
+    drag = false;
+
+    // create objects for the canvas
+    createObjects();
+
+    // set up event listeners
+    setEventListeners(canvas);
+
+    // call to draw the scene
+    draw();
+}
+
+function prepareCanvas() {
     // get canvas related references
     canvas = Object.create(Canvas);
     canvas.init('canvas', "#FAF7F8");
@@ -10,24 +27,24 @@ function initialize() {
     offsetY = BB.top;
     WIDTH = canvas.getWidth();
     HEIGHT = canvas.getHeight();
+}
 
-    // drag related variables
-    drag = false;
-
+// create objects
+function createObjects() {
     // an array of objects that define different rectangles
     rects = [];
 
     var rect1 = Object.create(Shape);
-    rect1.init(canvas, 75 - 15, 50 - 15, 30, 30, '#444444');
+    rect1.init(canvas, 60, 35, 30, 30, '#444444');
 
     var rect2 = Object.create(Shape);
-    rect2.init(canvas, 75 - 25, 50 - 25, 30, 30, '#ff550d');
+    rect2.init(canvas, 30, 85, 30, 30, '#ff550d');
 
     var rect3 = Object.create(Shape);
-    rect3.init(canvas, 75 - 35, 50 - 35, 30, 30, '#800080');
+    rect3.init(canvas, 120, 40, 30, 30, '#800080');
 
     var rect4 = Object.create(Shape);
-    rect4.init(canvas, 75 - 45, 50 - 45, 30, 30, '#0c64e8');
+    rect4.init(canvas, 300, 120, 30, 30, '#0c64e8');
 
     rects.push(rect1);
     rects.push(rect2);
@@ -35,14 +52,6 @@ function initialize() {
     rects.push(rect4);
 
     console.log(rects);
-
-    // listen for mouse events
-    canvas.onMouseDown(mDown);
-    canvas.onMouseUp(mUp);
-    canvas.onMouseMove(mMove);
-    
-    // call to draw the scene
-    draw();
 }
 
 // draw a single rect
@@ -65,12 +74,19 @@ function draw() {
     rect(0, 0, WIDTH, HEIGHT);
     // redraw each rect in the rects[] array
     for (var i = 0; i < rects.length; i++) {
-        var r = rects[i];
-        ctx.fillStyle = r.fill;
-        rect(r.x, r.y, r.width, r.height);
+        var rectangle = rects[i];
+        ctx.fillStyle = rectangle.fill;
+        rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
 }
 
+// set event listeners
+function setEventListeners(canvas) {
+    // listen for mouse events
+    canvas.onMouseDown(mDown);
+    canvas.onMouseUp(mUp);
+    canvas.onMouseMove(mMove);
+}
 
 // handle mousedown events
 function mDown(e) {
@@ -78,24 +94,24 @@ function mDown(e) {
     // tell the browser we're handling this mouse event
     e.preventDefault();
     e.stopPropagation();
-    console.log(e);
+
     // get the current mouse position
-    var mx = parseInt(e.clientX - offsetX);
-    var my = parseInt(e.clientY - offsetY);
+    var mouseX = parseInt(e.clientX - offsetX);
+    var mouseY = parseInt(e.clientY - offsetY);
 
     // test each rect to see if mouse is inside
     drag = false;
     for (var i = 0; i < rects.length; i++) {
-        var r = rects[i];
-        if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
+        var rectangle = rects[i];
+        if (mouseX > rectangle.x && mouseX < rectangle.x + rectangle.width && mouseY > rectangle.y && mouseY < rectangle.y + rectangle.height) {
             // if yes, set that rects isDragging=true
             drag = true;
-            r.isDragging = true;
+            rectangle.isDragging = true;
         }
     }
     // save the current mouse position
-    startX = mx;
-    startY = my;
+    startX = mouseX;
+    startY = mouseY;
 }
 
 
@@ -123,13 +139,13 @@ function mMove(e) {
         e.stopPropagation();
 
         // get the current mouse position
-        var mx = parseInt(e.clientX - offsetX);
-        var my = parseInt(e.clientY - offsetY);
+        var mouseX = parseInt(e.clientX - offsetX);
+        var mouseY = parseInt(e.clientY - offsetY);
 
         // calculate the distance the mouse has moved
         // since the last mousemove
-        var dx = mx - startX;
-        var dy = my - startY;
+        var dx = mouseX - startX;
+        var dy = mouseY - startY;
 
         // move each rect that isDragging 
         // by the distance the mouse has moved
@@ -146,8 +162,8 @@ function mMove(e) {
         draw();
 
         // reset the starting mouse position for the next mousemove
-        startX = mx;
-        startY = my;
+        startX = mouseX;
+        startY = mouseY;
 
     }
 }

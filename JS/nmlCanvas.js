@@ -26,7 +26,7 @@ let Canvas = {
     getHeight() {
         return this.canvas.height;
     },
-    getWidth () {
+    getWidth() {
         return this.canvas.width;
     },
     getBoundingClientRect() {
