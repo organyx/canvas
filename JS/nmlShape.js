@@ -5,12 +5,13 @@
  * nmlShape.js
  */
 let Shape = {
-    init(cv, x, y, width, height, color) {
+    init(cv, x, y, width, height, color, price) {
         this.ctx = cv.context;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.price = price;
         // this.color = color;
         this.fill = color;
         this.isDragging = false;

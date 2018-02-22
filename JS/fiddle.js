@@ -15,6 +15,9 @@ function initialize() {
 
     // call to draw the scene
     draw();
+
+    // draw item list
+    displayFurniture();
 }
 
 function prepareCanvas() {
@@ -35,16 +38,16 @@ function createObjects() {
     rects = [];
 
     var rect1 = Object.create(Shape);
-    rect1.init(canvas, 60, 35, 30, 30, '#444444');
+    rect1.init(canvas, 60, 35, 30, 30, '#444444', 123);
 
     var rect2 = Object.create(Shape);
-    rect2.init(canvas, 30, 85, 30, 30, '#ff550d');
+    rect2.init(canvas, 30, 85, 30, 30, '#ff550d', 456);
 
     var rect3 = Object.create(Shape);
-    rect3.init(canvas, 120, 40, 30, 30, '#800080');
+    rect3.init(canvas, 120, 40, 30, 30, '#800080', 789);
 
     var rect4 = Object.create(Shape);
-    rect4.init(canvas, 300, 120, 30, 30, '#0c64e8');
+    rect4.init(canvas, 300, 120, 30, 30, '#0c64e8', 178);
 
     rects.push(rect1);
     rects.push(rect2);
@@ -69,7 +72,7 @@ function clear() {
     ctx.save();
 
     // Use the identity matrix while clearing the canvas
-    // ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
     // Restore the transform
@@ -119,7 +122,7 @@ function mDown(e) {
 
             selectedRect = rectangle;
             selectedRectOrigin = Object.assign({}, selectedRect);
-            console.log(selectedRect);
+            console.log('Object Origin: ', selectedRectOrigin);
         }
     }
     // save the current mouse position
@@ -134,17 +137,18 @@ function mUp(e) {
     e.preventDefault();
     e.stopPropagation();
 
+    // create a temp array of shapes, except for the selected rect
     var temp = rects.slice();
     temp.pop(selectedRect);
     console.log(temp);
 
     for (var i = 0; i < temp.length; i++) {
         if (detectCollision(selectedRect, temp[i])) {
+            // reset selected object
             selectedRect = Object.assign({}, selectedRectOrigin);
-            console.log('New Pos: ', selectedRect);
-            console.log('Origin: ', selectedRectOrigin);
             draw();
         }
+        console.log('New Pos: ', selectedRect);
     }
 
     // clear selected retangle
@@ -186,7 +190,7 @@ function mMove(e) {
             if (rectangle.isDragging) {
                 rectangle.x += dx;
                 rectangle.y += dy;
-                console.log('X: ' + rectangle.x + ' Y: ' + rectangle.y);
+                // console.log('X: ' + rectangle.x + ' Y: ' + rectangle.y);
             }
 
         }
@@ -212,6 +216,22 @@ function detectCollision(object1, object2) {
         console.log('No Collision');
         return false;
     }
+}
+
+function displayFurniture() {
+    var list = $('itemList');
+    var text;
+    var p;
+    var li;
+    for(var i = 0; i < rects.length; i++) {
+        text = document.createTextNode('Item_' + parseInt(i) + ': ' + parseInt(rects[i].price) + '$');
+        p = document.createElement('p');
+        li = document.createElement('li');
+        p.appendChild(text);
+        li.appendChild(p);
+        list.appendChild(li);
+    }
+    console.log(list);
 }
 
 var nml = window.addEventListener('load', initialize, false);

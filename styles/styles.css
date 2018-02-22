@@ -31,6 +31,13 @@ body {
     padding-bottom: 25px;
 }
 
+.items {
+    display: flex;
+    position: relative;
+    float: left;
+    margin: 50px;
+}
+
 /* Add a black background color to the top navigation */
 
 .topnav {
