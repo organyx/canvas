@@ -2,21 +2,14 @@ var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, drag, startX, startY, rect
 
 function initialize() {
     // get canvas related references
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
+    canvas = Object.create(Canvas);
+    canvas.init('canvas', "#FAF7F8");
+    ctx = canvas.getContext();
     BB = canvas.getBoundingClientRect();
     offsetX = BB.left;
     offsetY = BB.top;
-    WIDTH = canvas.width;
-    HEIGHT = canvas.height;
-    canvas = Object.create(Canvas);
-    // canvas.init('canvas', "#FAF7F8");
-    // ctx = canvas.getContext();
-    // BB = canvas.getBoundingClientRect();
-    // offsetX = BB.left;
-    // offsetY = BB.top;
-    // WIDTH = canvas.getWidth();
-    // HEIGHT = canvas.getHeight();
+    WIDTH = canvas.getWidth();
+    HEIGHT = canvas.getHeight();
 
     // drag related variables
     drag = false;
@@ -44,9 +37,9 @@ function initialize() {
     console.log(rects);
 
     // listen for mouse events
-    canvas.onmousedown = mDown;
-    canvas.onmouseup = mUp;
-    canvas.onmousemove = mMove;
+    canvas.onMouseDown(mDown);
+    canvas.onMouseUp(mUp);
+    canvas.onMouseMove(mMove);
     
     // call to draw the scene
     draw();

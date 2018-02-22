@@ -31,5 +31,14 @@ let Canvas = {
     },
     getBoundingClientRect() {
         return this.canvas.getBoundingClientRect();
+    },
+    onMouseDown(event) {
+        this.canvas.onmousedown = event;
+    },
+    onMouseUp(event) {
+        this.canvas.onmouseup = event;
+    },
+    onMouseMove(event) {
+        this.canvas.onmousemove = event;
     }
 };
