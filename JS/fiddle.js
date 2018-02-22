@@ -1,4 +1,4 @@
-var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, dragok, startX, startY, rects;
+var canvas, ctx, BB, offsetX, offsetY, WIDTH, HEIGHT, drag, startX, startY, rects;
 
 function initialize() {
     // get canvas related references
@@ -11,49 +11,34 @@ function initialize() {
     HEIGHT = canvas.height;
 
     // drag related variables
-    dragok = false;
-    // var startX;
-    // var startY;
+    drag = false;
 
     // an array of objects that define different rectangles
     rects = [];
-    rects.push({
-        x: 75 - 15,
-        y: 50 - 15,
-        width: 30,
-        height: 30,
-        fill: "#444444",
-        isDragging: false
-    });
-    rects.push({
-        x: 75 - 25,
-        y: 50 - 25,
-        width: 30,
-        height: 30,
-        fill: "#ff550d",
-        isDragging: false
-    });
-    rects.push({
-        x: 75 - 35,
-        y: 50 - 35,
-        width: 30,
-        height: 30,
-        fill: "#800080",
-        isDragging: false
-    });
-    rects.push({
-        x: 75 - 45,
-        y: 50 - 45,
-        width: 30,
-        height: 30,
-        fill: "#0c64e8",
-        isDragging: false
-    });
+
+    var rect1 = Object.create(Shape);
+    rect1.init(canvas, 75 - 15, 50 - 15,  30, 30, '#444444');
+
+    var rect2 = Object.create(Shape);
+    rect2.init(canvas, 75 - 25, 50 - 25,  30, 30, '#ff550d');
+
+    var rect3 = Object.create(Shape);
+    rect3.init(canvas, 75 - 35, 50 - 35,  30, 30, '#800080');
+
+    var rect4 = Object.create(Shape);
+    rect4.init(canvas, 75 - 45, 50 - 45,  30, 30, '#0c64e8');
+    
+    rects.push(rect1);
+    rects.push(rect2);
+    rects.push(rect3);
+    rects.push(rect4);
+
+    console.log(rects);
 
     // listen for mouse events
-    canvas.onmousedown = myDown;
-    canvas.onmouseup = myUp;
-    canvas.onmousemove = myMove;
+    canvas.onmousedown = mDown;
+    canvas.onmouseup = mUp;
+    canvas.onmousemove = mMove;
 
     // call to draw the scene
     draw();
@@ -87,7 +72,7 @@ function draw() {
 
 
 // handle mousedown events
-function myDown(e) {
+function mDown(e) {
 
     // tell the browser we're handling this mouse event
     e.preventDefault();
@@ -98,12 +83,12 @@ function myDown(e) {
     var my = parseInt(e.clientY - offsetY);
 
     // test each rect to see if mouse is inside
-    dragok = false;
+    drag = false;
     for (var i = 0; i < rects.length; i++) {
         var r = rects[i];
         if (mx > r.x && mx < r.x + r.width && my > r.y && my < r.y + r.height) {
             // if yes, set that rects isDragging=true
-            dragok = true;
+            drag = true;
             r.isDragging = true;
         }
     }
@@ -114,13 +99,13 @@ function myDown(e) {
 
 
 // handle mouseup events
-function myUp(e) {
+function mUp(e) {
     // tell the browser we're handling this mouse event
     e.preventDefault();
     e.stopPropagation();
 
     // clear all the dragging flags
-    dragok = false;
+    drag = false;
     for (var i = 0; i < rects.length; i++) {
         rects[i].isDragging = false;
     }
@@ -128,9 +113,9 @@ function myUp(e) {
 
 
 // handle mouse moves
-function myMove(e) {
+function mMove(e) {
     // if we're dragging anything...
-    if (dragok) {
+    if (drag) {
 
         // tell the browser we're handling this mouse event
         e.preventDefault();
